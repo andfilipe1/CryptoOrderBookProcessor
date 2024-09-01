@@ -5,11 +5,13 @@ VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderBookMicroservice.Worker", "OrderBookMicroservice\OrderBookMicroservice.Worker.csproj", "{8D403D56-61D3-4465-8282-0F7E0D8B138E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBookMicroservice.Domain", "OrderBookMicroservice.Domain\OrderBookMicroservice.Domain.csproj", "{0EAA6CA9-CFD5-40A2-9231-F8C3B3E4BC00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderBookMicroservice.Domain", "OrderBookMicroservice.Domain\OrderBookMicroservice.Domain.csproj", "{0EAA6CA9-CFD5-40A2-9231-F8C3B3E4BC00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBookMicroservice.Application", "OrderBookMicroservice.Application\OrderBookMicroservice.Application.csproj", "{5C6DC0CC-0D41-40BD-B703-9A4376F6268A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderBookMicroservice.Application", "OrderBookMicroservice.Application\OrderBookMicroservice.Application.csproj", "{5C6DC0CC-0D41-40BD-B703-9A4376F6268A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBookMicroservice.Infrastructure", "OrderBookMicroservice.Infrastructure\OrderBookMicroservice.Infrastructure.csproj", "{A202A14F-001A-4E8C-A35B-4858D701736A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderBookMicroservice.Infrastructure", "OrderBookMicroservice.Infrastructure\OrderBookMicroservice.Infrastructure.csproj", "{A202A14F-001A-4E8C-A35B-4858D701736A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderBookMicroservice.Test", "OrderBookMicroservice.Test\OrderBookMicroservice.Test.csproj", "{C062E771-B62C-48C5-A1F9-89DE8AF63852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A202A14F-001A-4E8C-A35B-4858D701736A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A202A14F-001A-4E8C-A35B-4858D701736A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A202A14F-001A-4E8C-A35B-4858D701736A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C062E771-B62C-48C5-A1F9-89DE8AF63852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C062E771-B62C-48C5-A1F9-89DE8AF63852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C062E771-B62C-48C5-A1F9-89DE8AF63852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C062E771-B62C-48C5-A1F9-89DE8AF63852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
