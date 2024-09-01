@@ -1,12 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OrderBookMicroservice.Application.Services;
+using OrderBookMicroservice.Domain.Entities;
 
 namespace OrderBookMicroservice.Test.Fixtures
 {
-    internal class MetricsServiceFixture
+    public class MetricsServiceFixture 
     {
+        public MetricsService MetricsService { get; private set; }
+
+        public MetricsServiceFixture()
+        {
+            MetricsService = new MetricsService();
+        }
+
+        public static OrderBook CreateOrderBook(string instrument, List<Order> bids, List<Order> asks)
+        {
+            return new OrderBook
+            {
+                Instrument = instrument,
+                Bids = bids,
+                Asks = asks
+            };
+        }
     }
 }

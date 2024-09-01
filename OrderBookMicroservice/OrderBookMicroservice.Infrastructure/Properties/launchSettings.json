@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "OrderBookMicroservice.Infrastructure": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -1,54 +1,62 @@
 ﻿using OrderBookMicroservice.Application.Interfaces;
 using OrderBookMicroservice.Domain.Entities;
 
-public class MetricsService : IMetricsService
+namespace OrderBookMicroservice.Application.Services
 {
-    private readonly List<decimal> _btcPrices = new();
-    private readonly List<decimal> _ethPrices = new();
-    private readonly List<decimal> _btcQuantities = new();
-    private readonly List<decimal> _ethQuantities = new();
-
-    public void ProcessOrderBookData(OrderBook orderBook)
+    public class MetricsService : IMetricsService
     {
-        if (orderBook.Instrument == "btcusd")
+        private readonly List<decimal> _btcPrices = [];
+        private readonly List<decimal> _ethPrices = [];
+        private readonly List<decimal> _btcQuantities = [];
+        private readonly List<decimal> _ethQuantities = [];
+
+        public void ProcessOrderBookData(OrderBook orderBook)
         {
-            foreach (var bid in orderBook.Bids)
+            if (orderBook.Instrument == "btcusd")
             {
-                _btcPrices.Add(bid.Price);
-                _btcQuantities.Add(bid.Quantity);
+                foreach (var bid in orderBook.Bids)
+                {
+                    _btcPrices.Add(bid.Price);
+                    _btcQuantities.Add(bid.Quantity);
+                }
+            }
+            else if (orderBook.Instrument == "ethusd")
+            {
+                foreach (var ask in orderBook.Asks)
+                {
+                    _ethPrices.Add(ask.Price);
+                    _ethQuantities.Add(ask.Quantity);
+                }
             }
         }
-        else if (orderBook.Instrument == "ethusd")
+
+        public async Task CalculateMetricsEvery5Seconds(CancellationToken stoppingToken)
         {
-            foreach (var ask in orderBook.Asks)
+            while (!stoppingToken.IsCancellationRequested)
             {
-                _ethPrices.Add(ask.Price);
-                _ethQuantities.Add(ask.Quantity);
+                await Task.Delay(5000, stoppingToken);
+
+                // Calcular métricas para BTC/USD
+                if (_btcPrices.Count > 0)
+                {
+                    Console.WriteLine($"BTC/USD -> Max Price: {_btcPrices.Max()}, Min Price: {_btcPrices.Min()}, Avg Price: {_btcPrices.Average():F2}, Avg Quantity: {_btcQuantities.Average():F2}");
+                    _btcPrices.Clear();
+                    _btcQuantities.Clear();
+                }
+
+                // Calcular métricas para ETH/USD
+                if (_ethPrices.Count > 0)
+                {
+                    Console.WriteLine($"ETH/USD -> Max Price: {_ethPrices.Max()}, Min Price: {_ethPrices.Min()}, Avg Price: {_ethPrices.Average():F2}, Avg Quantity: {_ethQuantities.Average():F2}");
+                    _ethPrices.Clear();
+                    _ethQuantities.Clear();
+                }
             }
         }
-    }
 
-    public async Task CalculateMetricsEvery5Seconds(CancellationToken stoppingToken)
-    {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            await Task.Delay(5000, stoppingToken);
 
-            // Calcular métricas para BTC/USD
-            if (_btcPrices.Count > 0)
-            {
-                Console.WriteLine($"BTC/USD -> Max Price: {_btcPrices.Max()}, Min Price: {_btcPrices.Min()}, Avg Price: {_btcPrices.Average():F2}, Avg Quantity: {_btcQuantities.Average():F2}");
-                _btcPrices.Clear();
-                _btcQuantities.Clear();
-            }
-
-            // Calcular métricas para ETH/USD
-            if (_ethPrices.Count > 0)
-            {
-                Console.WriteLine($"ETH/USD -> Max Price: {_ethPrices.Max()}, Min Price: {_ethPrices.Min()}, Avg Price: {_ethPrices.Average():F2}, Avg Quantity: {_ethQuantities.Average():F2}");
-                _ethPrices.Clear();
-                _ethQuantities.Clear();
-            }
-        }
+        // Métodos para teste
+        public int GetBtcPricesCount() => _btcPrices.Count;
+        public int GetBtcQuantitiesCount() => _btcQuantities.Count;
     }
 }
