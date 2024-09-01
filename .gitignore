@@ -1,0 +1,68 @@
+# Arquivos e pastas do Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Pastas de build e binários
+**/[Bb]in/
+**/[Oo]bj/
+**/[Ll]og/
+**/[Tt]est[Rr]esult*
+
+# Arquivos específicos do projeto e de build
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Pasta do Rider (IDE da JetBrains)
+.idea/
+
+# Arquivos de pacotes NuGet 
+packages/
+**/[Pp]ackages/*
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Arquivos temporários gerados durante a compilação
+*.cache
+*.csproj.FilesWrittenAbsolute.txt
+*.csprojAssemblyReference.cache
+
+# Arquivos de depuração
+*.pdb
+*.exe
+*.dll
+
+# Arquivos de configuração e arquivos gerados automaticamente
+**/appsettings*.json
+**/secrets.json
+appsettings.development.json
+
+# Banco de dados e arquivos relacionados
+*.mdf
+*.ldf
+*.sqlite
+
+# Arquivos de cache do Docker
+.dockerignore
+**/[Dd]ocker[Cc]ompose*
+**/[Dd]ockerfile*
+
+# Arquivos específicos do projeto
+*.db
+*.db-shm
+*.db-wal
+
+# Outros arquivos e diretórios a serem ignorados
+**/[Tt]emp
+**/[Cc]ache
+node_modules/
+**/*.bak
+**/*.log
+*.DS_Store
