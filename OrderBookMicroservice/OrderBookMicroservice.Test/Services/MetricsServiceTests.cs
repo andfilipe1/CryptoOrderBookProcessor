@@ -22,14 +22,7 @@ namespace OrderBookMicroservice.Test.Services
             var orderBook = MetricsServiceFixture.CreateOrderBook("btcusd", bids, asks);
 
             // Act
-            _fixture.MetricsService.ProcessOrderBookData(orderBook);
-
-            // Assert
-            // Aqui, adicionamos asserções simuladas, pois as listas são privadas.
-            // Você precisaria criar métodos públicos na `MetricsService` para acessar as listas
-            // ou usar reflexão para acessar esses campos (não recomendado).
-            // Assert.Equal(2, _fixture.MetricsService.GetBtcPricesCount());
-            // Assert.Contains(30000, _fixture.MetricsService.GetBtcPrices());
+            _fixture.MetricsService.ProcessOrderBookData(orderBook);  
         }
 
         [Fact]
