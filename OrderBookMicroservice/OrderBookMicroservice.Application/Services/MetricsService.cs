@@ -54,9 +54,16 @@ namespace OrderBookMicroservice.Application.Services
             }
         }
 
-
-        // Métodos para teste
-        public int GetBtcPricesCount() => _btcPrices.Count;
-        public int GetBtcQuantitiesCount() => _btcQuantities.Count;
+        public MetricsSnapshot GetMetricsSnapshot()
+        {
+            return new MetricsSnapshot
+            {
+                BtcPricesCount = _btcPrices.Count,
+                BtcQuantitiesCount = _btcQuantities.Count,
+                EthPricesCount = _ethPrices.Count,
+                EthQuantitiesCount = _ethQuantities.Count
+            };
+        }
+ 
     }
 }

@@ -30,10 +30,10 @@ namespace OrderBookMicroservice.Test.Services
         {
             // Arrange
             var bids = new List<Order>
-            {
-                new() { Price = 30000, Quantity = 0.5m },
-                new() { Price = 31000, Quantity = 0.7m }
-            };
+                {
+                    new() { Price = 30000, Quantity = 0.5m },
+                    new() { Price = 31000, Quantity = 0.7m }
+                };
             bool taskCanceled = false;
 
             var asks = new List<Order>();
@@ -59,10 +59,10 @@ namespace OrderBookMicroservice.Test.Services
             }
 
             // Assert
-            Assert.Equal(0, _fixture.MetricsService.GetBtcPricesCount());
-            Assert.Equal(0, _fixture.MetricsService.GetBtcQuantitiesCount());
+            var metrics = _fixture.MetricsService.GetMetricsSnapshot();
+            Assert.Equal(0, metrics.BtcPricesCount);
+            Assert.Equal(0, metrics.BtcQuantitiesCount);
             Assert.True(taskCanceled, "A task deveria ter sido cancelada.");
-
         }
 
         [Fact]
