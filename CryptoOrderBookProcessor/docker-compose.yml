@@ -1,0 +1,6 @@
+services:
+  cryptoorderbookprocessor.worker:
+    image: ${DOCKER_REGISTRY-}cryptoorderbookprocessorworker
+    build:
+      context: .
+      dockerfile: CryptoOrderBookProcessor.Worker/Dockerfile

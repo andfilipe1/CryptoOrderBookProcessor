@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  orderbook_microservice_worker:
+    build:
+      context: ./CryptoOrderBookProcessor/CryptoOrderBookProcessor.Worker
+      dockerfile: Dockerfile
+    container_name: orderbook_microservice_worker
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://root:example@mongodb:27017/your_database_name
+    volumes:
+      - ./CryptoOrderBookProcessor/CryptoOrderBookProcessor.Worker:/app
+    command: dotnet /app/CryptoOrderBookProcessor.Worker.dll
+
+  # # Aqui você pode adicionar mais serviços, como a API
+  # orderbook_microservice_api:
+  #   build:
+  #     context: ./CryptoOrderBookProcessor/CryptoOrderBookProcessorApi
+  #     dockerfile: Dockerfile
+  #   container_name: orderbook_microservice_api
+  #   depends_on:
+  #     - mongodb
+  #   environment:
+  #     MONGO_URI: mongodb://root:example@mongodb:27017/your_database_name
+  #   ports:
+  #     - "5000:5000" # Exponha a API em uma porta específica
+
+volumes:
+  mongo_data:

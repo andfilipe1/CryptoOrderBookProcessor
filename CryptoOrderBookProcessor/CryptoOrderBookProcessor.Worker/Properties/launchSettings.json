@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CryptoOrderBookProcessor.Worker": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
