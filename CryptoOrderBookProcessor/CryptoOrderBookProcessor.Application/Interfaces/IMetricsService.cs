@@ -6,5 +6,6 @@ namespace CryptoOrderBookProcessor.Application.Interfaces
     {
         void ProcessOrderBookData(OrderBook orderBook);
         Task CalculateMetricsEvery5Seconds(CancellationToken stoppingToken);
+        MetricsSnapshot GetMetricsSnapshot();
     }
 }

@@ -35,7 +35,11 @@ namespace CryptoOrderBookProcessor.Application.Services
                     return null;
                 }
 
-                var instrument = jsonDocument.RootElement.GetProperty("channel").GetString()?.Split('_').LastOrDefault() ?? "unknown";
+                var instrument = "unknown";
+                if (jsonDocument.RootElement.TryGetProperty("channel", out var channelElement))
+                {
+                    instrument = channelElement.GetString()?.Split('_').LastOrDefault() ?? "unknown";
+                }
                 _logger.LogInformation($"Processando dados para o instrumento: {instrument}");
 
                 var orderBook = new OrderBook { Instrument = instrument };

@@ -14,14 +14,26 @@ namespace CryptoOrderBookProcessor.Application.Services
         {
             if (orderBook.Instrument == "btcusd")
             {
+                // Process both bids and asks for BTC/USD
                 foreach (var bid in orderBook.Bids)
                 {
                     _btcPrices.Add(bid.Price);
                     _btcQuantities.Add(bid.Quantity);
                 }
+                foreach (var ask in orderBook.Asks)
+                {
+                    _btcPrices.Add(ask.Price);
+                    _btcQuantities.Add(ask.Quantity);
+                }
             }
             else if (orderBook.Instrument == "ethusd")
             {
+                // Process both bids and asks for ETH/USD
+                foreach (var bid in orderBook.Bids)
+                {
+                    _ethPrices.Add(bid.Price);
+                    _ethQuantities.Add(bid.Quantity);
+                }
                 foreach (var ask in orderBook.Asks)
                 {
                     _ethPrices.Add(ask.Price);
