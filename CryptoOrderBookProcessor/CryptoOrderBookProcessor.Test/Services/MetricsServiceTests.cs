@@ -1,13 +1,19 @@
-﻿using Xunit;
+using Xunit;
 using CryptoOrderBookProcessor.Test.Fixtures;
 using CryptoOrderBookProcessor.Domain.Entities;
 using System.Threading.Tasks;
+using CryptoOrderBookProcessor.Application.Services;
 
 namespace CryptoOrderBookProcessor.Test.Services
 {
-    public class MetricsServiceTests(MetricsServiceFixture fixture) : IClassFixture<MetricsServiceFixture>
+    public class MetricsServiceTests
     {
-        private readonly MetricsServiceFixture _fixture = fixture;
+        private readonly MetricsService _metricsService;
+
+        public MetricsServiceTests()
+        {
+            _metricsService = new MetricsService();
+        }
 
         [Fact]
         public void ProcessOrderBookData_Should_Add_BtcPrices_And_Quantities()
@@ -22,7 +28,7 @@ namespace CryptoOrderBookProcessor.Test.Services
             var orderBook = MetricsServiceFixture.CreateOrderBook("btcusd", bids, asks);
 
             // Act
-            _fixture.MetricsService.ProcessOrderBookData(orderBook);  
+            _metricsService.ProcessOrderBookData(orderBook);  
         }
 
         [Fact]
@@ -38,12 +44,12 @@ namespace CryptoOrderBookProcessor.Test.Services
 
             var asks = new List<Order>();
             var orderBook = MetricsServiceFixture.CreateOrderBook("btcusd", bids, asks);
-            _fixture.MetricsService.ProcessOrderBookData(orderBook);
+            _metricsService.ProcessOrderBookData(orderBook);
 
             var cancellationTokenSource = new CancellationTokenSource();
 
             // Act
-            var task = _fixture.MetricsService.CalculateMetricsEvery5Seconds(cancellationTokenSource.Token);
+            var task = _metricsService.CalculateMetricsEvery5Seconds(cancellationTokenSource.Token);
 
             await Task.Delay(5500);
 
@@ -59,7 +65,7 @@ namespace CryptoOrderBookProcessor.Test.Services
             }
 
             // Assert
-            var metrics = _fixture.MetricsService.GetMetricsSnapshot();
+            var metrics = _metricsService.GetMetricsSnapshot();
             Assert.Equal(0, metrics.BtcPricesCount);
             Assert.Equal(0, metrics.BtcQuantitiesCount);
             Assert.True(taskCanceled, "A task deveria ter sido cancelada.");
@@ -78,11 +84,12 @@ namespace CryptoOrderBookProcessor.Test.Services
             var orderBook = MetricsServiceFixture.CreateOrderBook("ethusd", bids, asks);
 
             // Act
-            _fixture.MetricsService.ProcessOrderBookData(orderBook);
+            _metricsService.ProcessOrderBookData(orderBook);
 
-            // Assert
-            // Assert.Equal(2, _fixture.MetricsService.GetEthPricesCount());
-            // Assert.Contains(2000, _fixture.MetricsService.GetEthPrices());
+            // Assert - With our fix, ETH now processes both bids and asks
+            var snapshot = _metricsService.GetMetricsSnapshot();
+            Assert.Equal(2, snapshot.EthPricesCount);
+            Assert.Equal(2, snapshot.EthQuantitiesCount);
         }
 
         [Fact]
@@ -92,7 +99,7 @@ namespace CryptoOrderBookProcessor.Test.Services
             var cancellationTokenSource = new CancellationTokenSource();
 
             // Act
-            var task = _fixture.MetricsService.CalculateMetricsEvery5Seconds(cancellationTokenSource.Token);
+            var task = _metricsService.CalculateMetricsEvery5Seconds(cancellationTokenSource.Token);
             cancellationTokenSource.Cancel();
 
             // Assert
@@ -115,11 +122,58 @@ namespace CryptoOrderBookProcessor.Test.Services
             var orderBook = MetricsServiceFixture.CreateOrderBook("unknownusd", bids, asks);
 
             // Act
-            _fixture.MetricsService.ProcessOrderBookData(orderBook);
+            _metricsService.ProcessOrderBookData(orderBook);
 
-            // Assert
-            // Assert.Equal(0, _fixture.MetricsService.GetBtcPricesCount());
-            // Assert.Equal(0, _fixture.MetricsService.GetEthPricesCount());
+            // Assert - Unknown instruments should not affect BTC or ETH counts
+            var snapshot = _metricsService.GetMetricsSnapshot();
+            Assert.Equal(0, snapshot.BtcPricesCount);
+            Assert.Equal(0, snapshot.EthPricesCount);
+        }
+
+        [Fact]
+        public void ProcessOrderBookData_Should_Process_Both_Bids_And_Asks_For_BTC()
+        {
+            // Arrange
+            var bids = new List<Order>
+            {
+                new Order { Price = 30000, Quantity = 0.5m }
+            };
+            var asks = new List<Order>
+            {
+                new Order { Price = 30100, Quantity = 0.6m }
+            };
+            var orderBook = MetricsServiceFixture.CreateOrderBook("btcusd", bids, asks);
+
+            // Act
+            _metricsService.ProcessOrderBookData(orderBook);
+
+            // Assert - BTC should process both bids and asks (total: 2 prices, 2 quantities)
+            var snapshot = _metricsService.GetMetricsSnapshot();
+            Assert.Equal(2, snapshot.BtcPricesCount);
+            Assert.Equal(2, snapshot.BtcQuantitiesCount);
+        }
+
+        [Fact]
+        public void ProcessOrderBookData_Should_Process_Both_Bids_And_Asks_For_ETH()
+        {
+            // Arrange
+            var bids = new List<Order>
+            {
+                new Order { Price = 2000, Quantity = 1.0m }
+            };
+            var asks = new List<Order>
+            {
+                new Order { Price = 2100, Quantity = 1.5m }
+            };
+            var orderBook = MetricsServiceFixture.CreateOrderBook("ethusd", bids, asks);
+
+            // Act
+            _metricsService.ProcessOrderBookData(orderBook);
+
+            // Assert - ETH should process both bids and asks (total: 2 prices, 2 quantities)
+            var snapshot = _metricsService.GetMetricsSnapshot();
+            Assert.Equal(2, snapshot.EthPricesCount);
+            Assert.Equal(2, snapshot.EthQuantitiesCount);
         }
     }
 }
